@@ -28,6 +28,14 @@ class CreateHome {
   learnMoreDiv = null;
   titlePosteFilm = null;
   categoryFilm = null;
+  jsonItems = null;
+  descriptionContainer = null;
+  descriptionText = null;
+  descriptionFilm = null;
+  centerDivDescription = null;
+  filmsAndActors = null;
+  arrowContainer = null;
+  arrowLeft = null;
   renderItems = () => {
     this.backgroundContainer = document.createElement("div");
     this.backgroundContainer.setAttribute("class", "backgroundContainer");
@@ -50,6 +58,8 @@ class CreateHome {
       this.searchContainer.appendChild(this.paragraphSearch);
     this.renderFilmsActors = document.createElement("div");
     this.renderFilmsActors.setAttribute("class", "renderFilmsActors");
+    this.filmsAndActors = document.createElement("div");
+    this.filmsAndActors.setAttribute("class", "filmsAndActors");
     this.renderFilmImage = document.createElement("div");
     this.renderFilmImage.setAttribute("class", "renderFilmImage");
     this.headerImageFilm = document.createElement("header");
@@ -82,6 +92,7 @@ class CreateHome {
     const randomImage = Math.floor(Math.random() * 12);
     this.headerImageFilm.style = ` background: linear-gradient(#161616 5%, transparent 50%, #161616 85%),
     no-repeat center/100% 100% url(${itemsJson[randomImage].poster_url})`;
+    this.jsonItems = itemsJson[randomImage].description;
     itemsJson.map((el) => {
       this.individualFilmsContainer = document.createElement("div");
       this.imageFilms = document.createElement("img");
@@ -90,8 +101,9 @@ class CreateHome {
       this.imageActors = document.createElement("img");
       this.individualFilmsContainer.append(this.imageFilms);
       this.filmsContainer.append(this.individualFilmsContainer);
-      this.renderFilmsActors.append(this.filmsContainer);
-      this.renderFilmsActors.prepend(this.h2Films);
+      this.filmsAndActors.append(this.filmsContainer);
+      this.filmsAndActors.prepend(this.h2Films);
+      this.renderFilmsActors.append(this.filmsAndActors);
     });
     this.iconsFilmContainer(itemsJson[randomImage].title);
   };
@@ -102,16 +114,20 @@ class CreateHome {
       this.individualActorsContainer = document.createElement("div");
       this.imageActors = document.createElement("img");
       this.imageActors.src = el.image_url;
-      this.renderFilmsActors.append(this.h2Actors);
+      this.filmsAndActors.append(this.h2Actors);
       this.individualActorsContainer.append(this.imageActors);
       this.actorsContainer.append(this.individualActorsContainer);
-      this.renderFilmsActors.append(this.actorsContainer);
+      this.filmsAndActors.append(this.actorsContainer);
+      this.renderFilmsActors.append(this.filmsAndActors);
     });
   };
   iconsFilmContainer = (title) => {
     this.iconsContainer = document.createElement("div");
     this.iconsContainer.setAttribute("class", "iconsContainer");
+
     this.rowIconsContainer = document.createElement("div");
+    this.arrowContainer = document.createElement("div");
+    this.arrowContainer.setAttribute("class", "arrowContainer");
     this.rowIconsContainer.setAttribute("class", "rowIconsContainer");
     this.playButton = document.createElement("button");
     this.playButton.setAttribute("class", "playButton");
@@ -131,10 +147,50 @@ class CreateHome {
       this.playButton,
       this.learnMoreDiv
     );
+    this.iconsContainer.append(this.arrowContainer);
     this.iconsContainer.append(this.categoryFilm);
     this.iconsContainer.append(this.titlePosteFilm);
     this.iconsContainer.append(this.rowIconsContainer);
+
     this.renderFilmImage.append(this.iconsContainer);
+    this.clickonLearMore();
+  };
+  clickonLearMore = () => {
+    this.learnMoreDiv.addEventListener("click", (evt) => {
+      this.descriptionContainer = document.createElement("div");
+      this.descriptionContainer.setAttribute("class", "descriptionContainer");
+      this.descriptionText = document.createElement("h4");
+      this.descriptionText.append(this.jsonItems);
+      this.descriptionFilm = document.createElement("h3");
+      this.descriptionFilm.innerHTML = "Descrição";
+      this.descriptionContainer.appendChild(this.descriptionFilm);
+      this.descriptionContainer.appendChild(this.descriptionText);
+      if (document.querySelector(".filmsAndActors") != null) {
+        this.renderFilmsActors.removeChild(this.filmsAndActors);
+        this.body.removeChild(this.footerContainer);
+      } else {
+        this.arrowContainer.removeChild(this.arrowLeft);
+      }
+
+      this.renderFilmsActors.appendChild(this.descriptionContainer);
+
+      this.arrowLeft = document.createElement("i");
+      this.arrowLeft.setAttribute("class", "fa-solid fa-chevron-left");
+      this.arrowContainer.append(this.arrowLeft);
+      this.myArrow();
+    });
+  };
+  myArrow = async () => {
+    await this.arrowLeft.addEventListener("click", (evt) => {
+      const filmDsc = [...document.querySelectorAll(".descriptionContainer")];
+      this.renderFilmsActors.appendChild(this.filmsAndActors);
+      filmDsc.map((el) => {
+        el.remove(el);
+      });
+      //this.descriptionContainer.remove(this.descriptionContainer);
+      this.body.appendChild(this.footerContainer);
+      this.arrowContainer.removeChild(this.arrowLeft);
+    });
   };
 }
 export { CreateHome };
