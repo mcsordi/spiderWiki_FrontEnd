@@ -28,7 +28,9 @@ class CreateHome {
   learnMoreDiv = null;
   titlePosteFilm = null;
   categoryFilm = null;
-  jsonItems = null;
+  jsonDescription = null;
+  jsonImage = null;
+  jsonPoster = null;
   descriptionContainer = null;
   descriptionText = null;
   descriptionFilm = null;
@@ -42,6 +44,10 @@ class CreateHome {
   width = this.body.offsetWidth;
   heigth = this.body.offsetHeight;
   childrenfooter = null;
+  divWatchbutton = null;
+  learnMoreIcon = null;
+  learnMoreParagraph = null;
+  jsonTitle = null;
   renderItems = () => {
     this.backgroundContainer = document.createElement("div");
     this.backgroundContainer.setAttribute("class", "backgroundContainer");
@@ -103,16 +109,19 @@ class CreateHome {
   getFilms = async () => {
     const getItems = await fetch(this.endpointFilms);
     const itemsJson = await getItems.json();
+    this.jsonImage = await itemsJson[this.randomNumber].poster_url;
+    this.jsonTitle = await itemsJson[this.randomNumber].title;
 
-    this.headerImageFilm.style = ` background: linear-gradient(#161616 5%, transparent 50%, #161616 85%),
+    this.headerImageFilm.style = ` background: linear-gradient(#161616 5%, transparent 50%, #161616 85%  ),
     no-repeat center/100% 100% url(${itemsJson[this.randomNumber].poster_url})`;
-    this.jsonItems = itemsJson[this.randomNumber].description;
+    this.jsonDescription = await itemsJson[this.randomNumber].description;
+    this.jsonPoster = await itemsJson[this.randomNumber].poster_url;
     itemsJson.map((el) => {
       const myregexExp = el.trailer_url.split("?v=")[1].match(this.regex)[0];
       this.regexExpression.push(myregexExp);
       this.individualFilmsContainer = document.createElement("div");
-      this.individualFilmsContainer.setAttribute("id", el.title);
       this.imageFilms = document.createElement("img");
+      this.imageFilms.setAttribute("id", el._id);
       this.imageFilms.src = `${el.image_url}`;
       this.individualActorsContainer = document.createElement("div");
       this.imageActors = document.createElement("img");
@@ -123,13 +132,13 @@ class CreateHome {
       this.renderFilmsActors.append(this.filmsAndActors);
     });
     this.iconsFilmContainer(itemsJson[this.randomNumber].title);
+    this.onClickFilm();
   };
   getActors = async () => {
     const getItems = await fetch(this.endpointActors);
     const itemsJson = await getItems.json();
     itemsJson.map((el) => {
       this.individualActorsContainer = document.createElement("div");
-
       this.imageActors = document.createElement("img");
       this.imageActors.src = el.image_url;
       this.filmsAndActors.append(this.h2Actors);
@@ -144,22 +153,30 @@ class CreateHome {
     this.iconsContainer.setAttribute("class", "iconsContainer");
     this.rowIconsContainer = document.createElement("div");
     this.rowIconsContainer.setAttribute("class", "rowIconsContainer");
+    this.divWatchbutton = document.createElement("div");
+    this.divWatchbutton.setAttribute("class", "divWatchbutton");
     this.playButton = document.createElement("button");
     this.playButton.setAttribute("class", "playButton");
     this.playButton.innerHTML = `<i class="fa-solid fa-play"></i> <h3>Assistir</h3> `;
+    this.divWatchbutton.appendChild(this.playButton);
     this.addFavoriteDiv = document.createElement("div");
     this.addFavoriteDiv.setAttribute("class", "addFavoriteDiv");
     this.addFavoriteDiv.innerHTML = `<i class="fa-solid fa-circle-plus"></i> <p>Favoritos</p>`;
     this.learnMoreDiv = document.createElement("div");
     this.learnMoreDiv.setAttribute("class", "learnMoreDiv");
-    this.learnMoreDiv.innerHTML = `<i class="fa-solid fa-circle-info"></i> <p>Saiba Mais</p>`;
+    this.learnMoreIcon = document.createElement("i");
+    this.learnMoreIcon.setAttribute("class", "fa-solid fa-circle-info");
+    this.learnMoreParagraph = document.createElement("p");
+    this.learnMoreParagraph.innerHTML = "Saiba Mais";
+    this.learnMoreDiv.appendChild(this.learnMoreIcon);
+    this.learnMoreDiv.appendChild(this.learnMoreParagraph);
     this.titlePosteFilm = document.createElement("h1");
     this.titlePosteFilm.innerHTML = title;
     this.categoryFilm = document.createElement("span");
     this.categoryFilm.innerHTML = "<h2>Filme</h2>";
     this.rowIconsContainer.append(
       this.addFavoriteDiv,
-      this.playButton,
+      this.divWatchbutton,
       this.learnMoreDiv
     );
     this.iconsContainer.append(this.categoryFilm);
@@ -167,34 +184,56 @@ class CreateHome {
     this.iconsContainer.append(this.rowIconsContainer);
 
     this.renderFilmImage.append(this.iconsContainer);
-    this.clickonLearMore();
-    this.watchScreen();
+    this.clickonLearMore(false, this.learnMoreDiv, this.jsonDescription);
+    this.watchScreen(this.randomNumber);
   };
-  clickonLearMore = () => {
-    this.learnMoreDiv.addEventListener("click", (evt) => {
+  clickonLearMore = (changeImage, clickElement, textApi) => {
+    clickElement.addEventListener("click", (evt) => {
+      this.body.removeChild(this.footerContainer);
+      this.learnMoreDiv.removeChild(this.learnMoreIcon);
+      this.learnMoreDiv.removeChild(this.learnMoreParagraph);
+      this.renderFilmsActors.removeChild(this.filmsAndActors);
       this.descriptionContainer = document.createElement("div");
       this.descriptionContainer.setAttribute("class", "descriptionContainer");
       this.descriptionText = document.createElement("h4");
-      this.descriptionText.append(this.jsonItems);
       this.descriptionFilm = document.createElement("h3");
       this.descriptionFilm.innerHTML = "Descrição";
       this.descriptionContainer.appendChild(this.descriptionFilm);
       this.descriptionContainer.appendChild(this.descriptionText);
-      if (document.querySelector(".filmsAndActors") != null) {
-        this.renderFilmsActors.removeChild(this.filmsAndActors);
-        this.body.removeChild(this.footerContainer);
-      } else {
-        this.arrowLeft.remove(this.arrowLeft);
-      }
       this.renderFilmsActors.appendChild(this.descriptionContainer);
-
       this.arrowLeft.setAttribute("class", "fa-solid fa-chevron-left");
       this.iconsContainer.prepend(this.arrowLeft);
       this.myArrow();
+      if (changeImage == true) {
+        const getSpiderMovies = async () => {
+          const fetchFilms = await fetch(this.endpointFilms);
+          const fetchFilmsJson = await fetchFilms.json();
+          await fetchFilmsJson.map((element, idx) => {
+            if (element._id == evt.target.id) {
+              this.headerImageFilm.style = ` background: linear-gradient(#161616 5%  , transparent 50%, #161616  85%),
+        no-repeat center/100% 100% url(${element.poster_url});
+        margin-bottom:-20px`;
+              this.descriptionText.append(element.description);
+              this.titlePosteFilm.innerHTML = element.title;
+              return this.watchScreen(idx);
+            }
+          });
+        };
+        getSpiderMovies();
+      }
+      if (changeImage == false) {
+        this.descriptionText.append(textApi);
+      }
     });
   };
   myArrow = () => {
     this.arrowLeft.addEventListener("click", (evt) => {
+      this.headerImageFilm.style = ` background: linear-gradient(#161616 5%, transparent 50%, #161616 85%),
+      no-repeat center/100% 100% url(${this.jsonImage}),margin-bottom:-10px`;
+      this.titlePosteFilm.innerHTML = this.jsonTitle;
+      this.learnMoreDiv.appendChild(this.learnMoreIcon);
+      this.learnMoreDiv.appendChild(this.learnMoreParagraph);
+      this.rowIconsContainer.appendChild(this.learnMoreDiv);
       const filmDsc = [...document.querySelectorAll(".descriptionContainer")];
       this.renderFilmsActors.appendChild(this.filmsAndActors);
       filmDsc.map((el) => {
@@ -202,30 +241,33 @@ class CreateHome {
       });
       this.body.appendChild(this.footerContainer);
       this.arrowLeft.remove(this.arrowLeft);
-      const trailerClass = this.body.firstChild.classList;
+      const trailerClass = this.body.lastChild.previousSibling.classList[0];
+
       if (trailerClass == "watchScreenView") {
-        this.body.removeChild(this.watchScreenView);
+        this.watchScreenView.remove(this.watchScreenView);
 
         this.body.appendChild(this.backgroundContainer);
-        this.body.append(this.footerContainer);
+
+        this.body.appendChild(this.footerContainer);
       }
+      this.watchScreen(this.randomNumber);
     });
   };
 
-  watchScreen = async () => {
+  watchScreen = async (number) => {
     this.watchScreenView = document.createElement("div");
     this.watchScreenView.setAttribute("class", "watchScreenView");
     this.watchScreenView.innerHTML = `<iframe width="${this.width}" height="${
       this.heigth - 532
     }" src="https://www.youtube.com/embed/${
-      this.regexExpression[this.randomNumber]
+      this.regexExpression[number]
     }" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
 
     this.arrowLeft.setAttribute("class", "fa-solid fa-chevron-left");
     this.playButton.addEventListener("click", () => {
       this.footerContainer.remove(this.footerContainer);
-      this.body.removeChild(this.backgroundContainer);
-      this.body.prepend(this.watchScreenView);
+      this.backgroundContainer.remove(this.backgroundContainer);
+      this.body.appendChild(this.watchScreenView);
       this.watchScreenView.prepend(this.arrowLeft);
     });
     this.myArrow();
@@ -254,11 +296,13 @@ class CreateHome {
       [...el.children].map((element) => {
         element.classList.remove("redIcons");
       });
-      // [...el.children].map((element) => {
-      //   if (element.classList.value == "redIcons") {
+    });
+  };
 
-      //   }
-      // });
+  onClickFilm = async () => {
+    const myFilms = [...document.querySelectorAll(".filmsContainer img")];
+    myFilms.map((el) => {
+      this.clickonLearMore(true, el);
     });
   };
 }
