@@ -34,21 +34,31 @@ class CreateHome {
   descriptionFilm = null;
   centerDivDescription = null;
   filmsAndActors = null;
-  arrowContainer = null;
-  arrowLeft = null;
+  arrowLeft = document.createElement("i");
+  regex = /^.{11}/;
+  watchScreenView = null;
+  regexExpression = [];
+  randomNumber = Math.floor(Math.random() * 12);
+  width = this.body.offsetWidth;
+  heigth = this.body.offsetHeight;
+  childrenfooter = null;
   renderItems = () => {
     this.backgroundContainer = document.createElement("div");
     this.backgroundContainer.setAttribute("class", "backgroundContainer");
     this.footerContainer = document.createElement("div");
     this.footerContainer.setAttribute("class", "footerContainer");
     this.homeContainer = document.createElement("div");
+    this.homeContainer.setAttribute("class", "homeContainer");
     this.favoriteContainer = document.createElement("div");
+    this.favoriteContainer.setAttribute("class", "favoriteContainer");
     this.searchContainer = document.createElement("div");
+    this.searchContainer.setAttribute("class", "searchContainer");
     this.paragraphHome = document.createElement("p");
+    this.paragraphHome.classList.add("redIcons");
     this.paragraphSearch = document.createElement("p");
     this.paragraphFavorite = document.createElement("p");
     this.paragraphHome.append("Home");
-    (this.homeContainer.innerHTML = `<i class="fa-solid fa-house"></i>`),
+    (this.homeContainer.innerHTML = `<i class="fa-solid fa-house redIcons"></i>`),
       this.homeContainer.appendChild(this.paragraphHome);
     this.paragraphFavorite.append("Favoritos");
     (this.favoriteContainer.innerHTML = `<i class="fa-solid fa-heart"></i>`),
@@ -85,16 +95,23 @@ class CreateHome {
     this.body.appendChild(this.footerContainer);
     this.getFilms();
     this.getActors();
+    this.childrenfooter = [
+      ...document.querySelector(".footerContainer").children,
+    ];
+    this.changeColorFooter();
   };
   getFilms = async () => {
     const getItems = await fetch(this.endpointFilms);
     const itemsJson = await getItems.json();
-    const randomImage = Math.floor(Math.random() * 12);
+
     this.headerImageFilm.style = ` background: linear-gradient(#161616 5%, transparent 50%, #161616 85%),
-    no-repeat center/100% 100% url(${itemsJson[randomImage].poster_url})`;
-    this.jsonItems = itemsJson[randomImage].description;
+    no-repeat center/100% 100% url(${itemsJson[this.randomNumber].poster_url})`;
+    this.jsonItems = itemsJson[this.randomNumber].description;
     itemsJson.map((el) => {
+      const myregexExp = el.trailer_url.split("?v=")[1].match(this.regex)[0];
+      this.regexExpression.push(myregexExp);
       this.individualFilmsContainer = document.createElement("div");
+      this.individualFilmsContainer.setAttribute("id", el.title);
       this.imageFilms = document.createElement("img");
       this.imageFilms.src = `${el.image_url}`;
       this.individualActorsContainer = document.createElement("div");
@@ -105,13 +122,14 @@ class CreateHome {
       this.filmsAndActors.prepend(this.h2Films);
       this.renderFilmsActors.append(this.filmsAndActors);
     });
-    this.iconsFilmContainer(itemsJson[randomImage].title);
+    this.iconsFilmContainer(itemsJson[this.randomNumber].title);
   };
   getActors = async () => {
     const getItems = await fetch(this.endpointActors);
     const itemsJson = await getItems.json();
     itemsJson.map((el) => {
       this.individualActorsContainer = document.createElement("div");
+
       this.imageActors = document.createElement("img");
       this.imageActors.src = el.image_url;
       this.filmsAndActors.append(this.h2Actors);
@@ -124,10 +142,7 @@ class CreateHome {
   iconsFilmContainer = (title) => {
     this.iconsContainer = document.createElement("div");
     this.iconsContainer.setAttribute("class", "iconsContainer");
-
     this.rowIconsContainer = document.createElement("div");
-    this.arrowContainer = document.createElement("div");
-    this.arrowContainer.setAttribute("class", "arrowContainer");
     this.rowIconsContainer.setAttribute("class", "rowIconsContainer");
     this.playButton = document.createElement("button");
     this.playButton.setAttribute("class", "playButton");
@@ -147,13 +162,13 @@ class CreateHome {
       this.playButton,
       this.learnMoreDiv
     );
-    this.iconsContainer.append(this.arrowContainer);
     this.iconsContainer.append(this.categoryFilm);
     this.iconsContainer.append(this.titlePosteFilm);
     this.iconsContainer.append(this.rowIconsContainer);
 
     this.renderFilmImage.append(this.iconsContainer);
     this.clickonLearMore();
+    this.watchScreen();
   };
   clickonLearMore = () => {
     this.learnMoreDiv.addEventListener("click", (evt) => {
@@ -169,27 +184,81 @@ class CreateHome {
         this.renderFilmsActors.removeChild(this.filmsAndActors);
         this.body.removeChild(this.footerContainer);
       } else {
-        this.arrowContainer.removeChild(this.arrowLeft);
+        this.arrowLeft.remove(this.arrowLeft);
       }
-
       this.renderFilmsActors.appendChild(this.descriptionContainer);
 
-      this.arrowLeft = document.createElement("i");
       this.arrowLeft.setAttribute("class", "fa-solid fa-chevron-left");
-      this.arrowContainer.append(this.arrowLeft);
+      this.iconsContainer.prepend(this.arrowLeft);
       this.myArrow();
     });
   };
-  myArrow = async () => {
-    await this.arrowLeft.addEventListener("click", (evt) => {
+  myArrow = () => {
+    this.arrowLeft.addEventListener("click", (evt) => {
       const filmDsc = [...document.querySelectorAll(".descriptionContainer")];
       this.renderFilmsActors.appendChild(this.filmsAndActors);
       filmDsc.map((el) => {
         el.remove(el);
       });
-      //this.descriptionContainer.remove(this.descriptionContainer);
       this.body.appendChild(this.footerContainer);
-      this.arrowContainer.removeChild(this.arrowLeft);
+      this.arrowLeft.remove(this.arrowLeft);
+      const trailerClass = this.body.firstChild.classList;
+      if (trailerClass == "watchScreenView") {
+        this.body.removeChild(this.watchScreenView);
+
+        this.body.appendChild(this.backgroundContainer);
+        this.body.append(this.footerContainer);
+      }
+    });
+  };
+
+  watchScreen = async () => {
+    this.watchScreenView = document.createElement("div");
+    this.watchScreenView.setAttribute("class", "watchScreenView");
+    this.watchScreenView.innerHTML = `<iframe width="${this.width}" height="${
+      this.heigth - 532
+    }" src="https://www.youtube.com/embed/${
+      this.regexExpression[this.randomNumber]
+    }" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+
+    this.arrowLeft.setAttribute("class", "fa-solid fa-chevron-left");
+    this.playButton.addEventListener("click", () => {
+      this.footerContainer.remove(this.footerContainer);
+      this.body.removeChild(this.backgroundContainer);
+      this.body.prepend(this.watchScreenView);
+      this.watchScreenView.prepend(this.arrowLeft);
+    });
+    this.myArrow();
+  };
+  changeColorFooter = () => {
+    this.childrenfooter.map((el) => {
+      el.addEventListener("click", (evt) => {
+        this.removeRedColor();
+        if (
+          evt.target.classList == "homeContainer" ||
+          evt.target.parentNode.classList == "homeContainer" ||
+          evt.target.classList == "searchContainer" ||
+          evt.target.parentNode.classList == "searchContainer" ||
+          evt.target.classList == "favoriteContainer" ||
+          evt.target.parentNode.classList == "favoriteContainer"
+        ) {
+          [...el.children].map((el) => {
+            el.classList.add("redIcons");
+          });
+        }
+      });
+    });
+  };
+  removeRedColor = () => {
+    this.childrenfooter.map((el) => {
+      [...el.children].map((element) => {
+        element.classList.remove("redIcons");
+      });
+      // [...el.children].map((element) => {
+      //   if (element.classList.value == "redIcons") {
+
+      //   }
+      // });
     });
   };
 }
