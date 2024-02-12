@@ -31,6 +31,17 @@ body {
   overflow-y: scroll;
   position: relative;
 }
+.backgroundContainerMaxHeight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  width: 100%;
+  height: 100%;
+  background-color: #161616;
+  overflow-y: scroll;
+  position: relative;
+}
 .footerContainer {
   display: flex;
   flex-direction: row;
@@ -76,6 +87,7 @@ body {
   width: 100%;
   min-height: 60%;
   position: relative;
+  background-color: #161616;
 }
 header {
   display: flex;
@@ -140,6 +152,7 @@ header {
   align-items: end;
   justify-content: center;
   width: 100%;
+  background-color: #161616;
 }
 .divWatchbutton button {
   position: absolute;
@@ -246,4 +259,32 @@ iframe {
 span h2 {
   font-size: 14px;
   font-weight: 700;
+}
+.descriptionActorsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 100%;
+  min-height: 100%;
+  background-color: #161616;
+  position: relative;
+  overflow-y: scroll;
+}
+.descriptionActorsContainer h4 {
+  display: flex;
+  text-align: start;
+  font-size: 14px;
+  padding-left: 7.5%;
+  padding-right: 7.5%;
+  margin-top: 10px;
+  margin-bottom: 18px;
+}
+.descriptionActorsContainer h3 {
+  display: flex;
+  text-align: start;
+  padding-left: 7.5%;
+  margin-top: 24px;
+}
+.iconsContainer span {
+  color: #fff;
 }

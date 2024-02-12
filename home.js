@@ -48,6 +48,9 @@ class CreateHome {
   learnMoreIcon = null;
   learnMoreParagraph = null;
   jsonTitle = null;
+  descriptionActorsContainer = null;
+  descriptionActor = null;
+
   renderItems = () => {
     this.backgroundContainer = document.createElement("div");
     this.backgroundContainer.setAttribute("class", "backgroundContainer");
@@ -112,8 +115,12 @@ class CreateHome {
     this.jsonImage = await itemsJson[this.randomNumber].poster_url;
     this.jsonTitle = await itemsJson[this.randomNumber].title;
 
-    this.headerImageFilm.style = ` background: linear-gradient(#161616 5%, transparent 50%, #161616 85%  ),
-    no-repeat center/100% 100% url(${itemsJson[this.randomNumber].poster_url})`;
+    this.headerImageFilm.setAttribute(
+      `style`,
+      `background: linear-gradient(#161616 5%, transparent 50%, #161616 85% ),
+    no-repeat center/100% 100% url(${itemsJson[this.randomNumber].poster_url}`
+    );
+
     this.jsonDescription = await itemsJson[this.randomNumber].description;
     this.jsonPoster = await itemsJson[this.randomNumber].poster_url;
     itemsJson.map((el) => {
@@ -135,11 +142,18 @@ class CreateHome {
     this.onClickFilm();
   };
   getActors = async () => {
+    this.descriptionActorsContainer = document.createElement("div");
+    this.descriptionActorsContainer.setAttribute(
+      "class",
+      "descriptionActorsContainer"
+    );
+    this.descriptionActor = document.createElement("h4");
     const getItems = await fetch(this.endpointActors);
     const itemsJson = await getItems.json();
     itemsJson.map((el) => {
       this.individualActorsContainer = document.createElement("div");
       this.imageActors = document.createElement("img");
+      this.imageActors.setAttribute("id", el._id);
       this.imageActors.src = el.image_url;
       this.filmsAndActors.append(this.h2Actors);
       this.individualActorsContainer.append(this.imageActors);
@@ -147,6 +161,7 @@ class CreateHome {
       this.filmsAndActors.append(this.actorsContainer);
       this.renderFilmsActors.append(this.filmsAndActors);
     });
+    this.onClickActor();
   };
   iconsFilmContainer = (title) => {
     this.iconsContainer = document.createElement("div");
@@ -190,6 +205,10 @@ class CreateHome {
   clickonLearMore = (changeImage, clickElement, textApi) => {
     clickElement.addEventListener("click", (evt) => {
       this.body.removeChild(this.footerContainer);
+      this.backgroundContainer.setAttribute(
+        "class",
+        "backgroundContainerMaxHeight"
+      );
       this.learnMoreDiv.removeChild(this.learnMoreIcon);
       this.learnMoreDiv.removeChild(this.learnMoreParagraph);
       this.renderFilmsActors.removeChild(this.filmsAndActors);
@@ -203,16 +222,18 @@ class CreateHome {
       this.renderFilmsActors.appendChild(this.descriptionContainer);
       this.arrowLeft.setAttribute("class", "fa-solid fa-chevron-left");
       this.iconsContainer.prepend(this.arrowLeft);
-      this.myArrow();
+      this.myArrow(this.jsonImage);
       if (changeImage == true) {
         const getSpiderMovies = async () => {
           const fetchFilms = await fetch(this.endpointFilms);
           const fetchFilmsJson = await fetchFilms.json();
           await fetchFilmsJson.map((element, idx) => {
             if (element._id == evt.target.id) {
-              this.headerImageFilm.style = ` background: linear-gradient(#161616 5%  , transparent 50%, #161616  85%),
-        no-repeat center/100% 100% url(${element.poster_url});
-        margin-bottom:-20px`;
+              this.headerImageFilm.setAttribute(
+                `style`,
+                `background: linear-gradient(#161616 5%, transparent 50%, #161616 85% ),
+              no-repeat center/100% 100% url(${element.poster_url}`
+              );
               this.descriptionText.append(element.description);
               this.titlePosteFilm.innerHTML = element.title;
               return this.watchScreen(idx);
@@ -226,10 +247,17 @@ class CreateHome {
       }
     });
   };
-  myArrow = () => {
+  myArrow = (api) => {
     this.arrowLeft.addEventListener("click", (evt) => {
-      this.headerImageFilm.style = ` background: linear-gradient(#161616 5%, transparent 50%, #161616 85%),
-      no-repeat center/100% 100% url(${this.jsonImage}),margin-bottom:-10px`;
+      this.backgroundContainer.setAttribute("class", "backgroundContainer");
+      this.categoryFilm.innerHTML = "<h2>Filme</h2>";
+      this.descriptionActorsContainer.remove(this.descriptionActorsContainer);
+      this.headerImageFilm.setAttribute(
+        `style`,
+        `background: linear-gradient(#161616 5%, transparent 50%, #161616 85% ),
+      no-repeat center/100% 100% url(${api}`
+      );
+      this.divWatchbutton.appendChild(this.playButton);
       this.titlePosteFilm.innerHTML = this.jsonTitle;
       this.learnMoreDiv.appendChild(this.learnMoreIcon);
       this.learnMoreDiv.appendChild(this.learnMoreParagraph);
@@ -257,6 +285,7 @@ class CreateHome {
   watchScreen = async (number) => {
     this.watchScreenView = document.createElement("div");
     this.watchScreenView.setAttribute("class", "watchScreenView");
+    this.watchScreenFilm = document.createElement("iframe");
     this.watchScreenView.innerHTML = `<iframe width="${this.width}" height="${
       this.heigth - 532
     }" src="https://www.youtube.com/embed/${
@@ -270,7 +299,7 @@ class CreateHome {
       this.body.appendChild(this.watchScreenView);
       this.watchScreenView.prepend(this.arrowLeft);
     });
-    this.myArrow();
+    this.myArrow(this.jsonImage);
   };
   changeColorFooter = () => {
     this.childrenfooter.map((el) => {
@@ -304,6 +333,47 @@ class CreateHome {
     myFilms.map((el) => {
       this.clickonLearMore(true, el);
     });
+  };
+  onClickActor = async () => {
+    const myActors = [...document.querySelectorAll(".actorsContainer img")];
+    myActors.map((el) => {
+      el.addEventListener("click", (evt) => {
+        this.descriptionActorsContainer.innerHTML = "<h3>Descrição</h3>";
+        this.iconsContainer.prepend(this.arrowLeft);
+        this.playButton.remove(this.playButton);
+        this.learnMoreIcon.remove(this.learnMoreIcon);
+        this.learnMoreParagraph.remove(this.learnMoreParagraph);
+        const getSpiderActors = async () => {
+          const fetchActors = await fetch(this.endpointActors);
+          const fetchActorsJson = await fetchActors.json();
+          await fetchActorsJson.map((element, idx) => {
+            if (element._id == evt.target.id) {
+              this.headerImageFilm.style = ` background: linear-gradient(#161616 5%  , transparent 50%, #161616  85%),
+        no-repeat center/100% 100% url(${element.poster_url});
+`;
+              this.titlePosteFilm.innerHTML = element.nameActor;
+              this.body.removeChild(this.footerContainer);
+              this.filmsAndActors.remove(this.filmsAndActors);
+
+              this.descriptionActor.innerHTML = element.description;
+              this.descriptionActorsContainer.appendChild(
+                this.descriptionActor
+              );
+              this.renderFilmsActors.appendChild(
+                this.descriptionActorsContainer
+              );
+              this.backgroundContainer.setAttribute(
+                "class",
+                "backgroundContainerMaxHeight"
+              );
+              this.categoryFilm.innerHTML = "<h2>Ator</h2>";
+            }
+          });
+        };
+        getSpiderActors();
+      });
+    });
+    this.myArrow(this.endpointActors);
   };
 }
 export { CreateHome };
