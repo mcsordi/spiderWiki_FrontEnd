@@ -11,9 +11,19 @@ p,
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5 {
   font-family: "Source Sans 3", sans-serif;
   color: #fff;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 900;
+}
+h5 {
+  font-size: 14px;
+  font-weight: 400;
 }
 body {
   width: 100%;
@@ -31,17 +41,7 @@ body {
   overflow-y: scroll;
   position: relative;
 }
-.backgroundContainerMaxHeight {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
-  width: 100%;
-  height: 100%;
-  background-color: #161616;
-  overflow-y: scroll;
-  position: relative;
-}
+
 .footerContainer {
   display: flex;
   flex-direction: row;
@@ -85,7 +85,7 @@ body {
   align-items: end;
   justify-content: center;
   width: 100%;
-  min-height: 60%;
+  min-height: 460px;
   position: relative;
   background-color: #161616;
 }
@@ -167,25 +167,24 @@ header {
   border-radius: 8px;
   background-color: #e5e5e5;
   margin-bottom: 5px;
+  padding: 0px 0.5rem;
 }
-.playButton h3 {
-  color: #000;
-}
-.playButton .fa-play {
+
+button .fa-play {
   font-size: 16px;
 }
 .addFavoriteDiv,
 .learnMoreDiv {
   display: flex;
-  width: 100px;
   align-items: center;
   justify-content: end;
   flex-direction: column;
   white-space: nowrap;
-  z-index: 11111111111111111;
 }
-
-.fa-circle-plus,
+.addFavoriteDiv p {
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
 .fa-circle-info {
   color: #e5e5e5;
   font-size: 1.2rem;
@@ -194,7 +193,7 @@ header {
 .rowIconsContainer p {
   font-size: 0.8rem;
 }
-.iconsContainer span {
+span {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -215,6 +214,7 @@ header {
   position: fixed;
   overflow-y: scroll;
 }
+
 .descriptionContainer h4 {
   font-size: 14px;
   width: 85%;
@@ -225,22 +225,6 @@ header {
   margin-top: 24px;
 }
 
-body .fa-chevron-left {
-  display: flex;
-  align-items: start;
-  justify-content: start;
-  height: 100%;
-}
-.watchScreenView .fa-chevron-left {
-  padding-left: 29px;
-}
-.fa-chevron-left {
-  color: #fff;
-  padding-top: 64px;
-  font-size: 18px;
-  position: absolute;
-  z-index: 111;
-}
 .watchScreenView {
   display: flex;
   align-items: center;
@@ -287,4 +271,107 @@ span h2 {
 }
 .iconsContainer span {
   color: #fff;
+}
+.backgroundFilmsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: #161616;
+  overflow-y: scroll;
+}
+.imageFilmContent {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  width: 100%;
+  min-height: 460px;
+  background-color: #161616;
+}
+.infoFilm {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: start;
+}
+.centerInfoFilm {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 85%;
+}
+.fa-chevron-left {
+  font-size: 15px;
+  color: #fff;
+  margin: 15% 29px;
+  position: absolute;
+  z-index: 1111;
+}
+.infoIcons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.rowInfoIcons {
+  display: flex;
+  flex-direction: row;
+  width: 85%;
+  height: auto;
+  align-items: end;
+  justify-content: start;
+}
+.rowInfoIcons button {
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  min-width: 100px;
+  height: 36px;
+  border-radius: 8px;
+  background-color: #e5e5e5;
+  padding: 0px 0.5rem;
+}
+button h3 {
+  font-size: 14px;
+  color: #000;
+}
+.fa-circle-plus {
+  color: #e5e5e5;
+  font-size: 1.2rem;
+}
+.playButtonDiv {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  width: 70%;
+  margin-bottom: 5px;
+}
+#details {
+  margin-top: 30px;
+}
+#filmDetails {
+  margin-top: 10px;
+}
+#title {
+  line-height: 110%;
+}
+.textInfos {
+  display: flex;
+  width: 85%;
+  height: 100%;
+  flex-direction: column;
+  align-items: start;
+  justify-content: end;
+  margin-bottom: 24px;
+}
+.textInfos h4 {
+  font-size: 18px;
+  font-weight: 400;
 }
