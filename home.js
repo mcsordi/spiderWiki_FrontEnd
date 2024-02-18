@@ -50,6 +50,9 @@ class CreateHome {
   jsonTitle = null;
   descriptionActorsContainer = null;
   descriptionActor = null;
+  favContainer = null;
+  favoriteListFilms = [];
+  jsonId = null;
 
   renderItems = () => {
     this.backgroundContainer = document.createElement("div");
@@ -99,8 +102,8 @@ class CreateHome {
     this.backgroundContainer.appendChild(this.renderFilmImage);
     this.backgroundContainer.appendChild(this.renderFilmsActors);
     this.body.appendChild(this.footerContainer);
-    this.getFilms();
     this.getActors();
+    this.getFilms();
     this.childrenfooter = [
       ...document.querySelector(".footerContainer").children,
     ];
@@ -111,6 +114,7 @@ class CreateHome {
     const itemsJson = await getItems.json();
     this.jsonImage = await itemsJson[this.randomNumber].poster_url;
     this.jsonTitle = await itemsJson[this.randomNumber].title;
+    this.jsonId = await itemsJson[this.randomNumber]._id;
 
     this.headerImageFilm.setAttribute(
       `style`,
@@ -120,8 +124,10 @@ class CreateHome {
 
     this.jsonDescription = await itemsJson[this.randomNumber].description;
     this.jsonPoster = await itemsJson[this.randomNumber].poster_url;
+    localStorage.setItem("nameFilm@Id", itemsJson[this.randomNumber]._id);
     itemsJson.map((el) => {
       const myregexExp = el.trailer_url.split("?v=")[1].match(this.regex)[0];
+
       this.regexExpression.push(myregexExp);
       this.individualFilmsContainer = document.createElement("div");
       this.imageFilms = document.createElement("img");
@@ -159,6 +165,7 @@ class CreateHome {
       this.renderFilmsActors.appendChild(this.filmsAndActors);
     });
     this.onClickActor();
+    this.onClickFavorite();
   };
   iconsFilmContainer = (title) => {
     this.iconsContainer = document.createElement("div");
@@ -196,79 +203,38 @@ class CreateHome {
 
     this.renderFilmImage.appendChild(this.iconsContainer);
     this.clickonLearMore(this.learnMoreDiv);
-    this.watchScreen(this.randomNumber);
+    this.onPlayButton();
   };
   clickonLearMore = (target) => {
     target.addEventListener("click", (evt) => {
-      //window.open("./films.html", "_self");
-      // const getSpiderMovies = async () => {
-      //   const fetchFilms = await fetch(this.endpointFilms);
-      //   const fetchFilmsJson = await fetchFilms.json();
-      //   await fetchFilmsJson.map((element, idx) => {
-      //     if (element._id == evt.target.id) {
-      //       this.headerImageFilm.setAttribute(
-      //         `style`,
-      //         `background: linear-gradient(#161616 5%, transparent 50%, #161616 85% ),
-      //       no-repeat center/100% 100% url(${element.poster_url}`
-      //       );
-      //       this.descriptionText.innerHTML = element.description;
-      //       this.titlePosteFilm.innerHTML = element.title;
-      //       return this.watchScreen(idx);
-      //     }
-      //   });
-      // };
+      localStorage.setItem(
+        "urlTrailerFilm@ID",
+        this.regexExpression[this.randomNumber]
+      );
+      window.open("./films.html", "_self");
     });
   };
-  // myArrow = (api) => {
-  //   this.arrowLeft.addEventListener("click", (evt) => {
-  //     this.backgroundContainer.setAttribute("class", "backgroundContainer");
-  //     this.categoryFilm.innerHTML = "<h2>Filme</h2>";
-  //     this.descriptionActorsContainer.remove(this.descriptionActorsContainer);
-  //     this.headerImageFilm.setAttribute(
-  //       `style`,
-  //       `background: linear-gradient(#161616 5%, transparent 50%, #161616 85% ),
-  //     no-repeat center/100% 100% url(${api}`
-  //     );
-  //     this.divWatchbutton.appendChild(this.playButton);
-  //     this.titlePosteFilm.innerHTML = this.jsonTitle;
-  //     this.learnMoreDiv.appendChild(this.learnMoreIcon);
-  //     this.learnMoreDiv.appendChild(this.learnMoreParagraph);
-  //     this.rowIconsContainer.appendChild(this.learnMoreDiv);
-  //     const filmDsc = [...document.querySelectorAll(".descriptionContainer")];
-  //     this.renderFilmsActors.appendChild(this.filmsAndActors);
-  //     filmDsc.map((el) => {
-  //       renderFilmsActors.removeChild(el);
-  //     });
-  //     this.body.appendChild(this.footerContainer);
-  //     this.arrowLeft.remove(this.arrowLeft);
-  //     const trailerClass = this.body.lastChild.previousSibling.classList[0];
 
-  //     if (trailerClass == "watchScreenView") {
-  //       this.watchScreenView.remove(this.watchScreenView);
-
-  //       this.body.appendChild(this.backgroundContainer);
-
-  //       this.body.appendChild(this.footerContainer);
-  //     }
-  //     this.watchScreen(this.randomNumber);
-  //   });
-  // };
-
-  watchScreen = async (number) => {
+  onPlayButton = async () => {
     this.watchScreenView = document.createElement("div");
     this.watchScreenView.setAttribute("class", "watchScreenView");
     this.watchScreenFilm = document.createElement("iframe");
-    this.watchScreenView.innerHTML = `<iframe width="${this.width}" height="${
-      this.heigth - 532
-    }" src="https://www.youtube.com/embed/${
-      this.regexExpression[number]
-    }" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
-
+    this.watchScreenView.innerHTML = `<div class="fullTrailerContainer"><iframe width="${
+      this.width
+    }" height="${this.heigth - 532}" src="https://www.youtube.com/embed/${
+      this.regexExpression[this.randomNumber]
+    }" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
     this.playButton.addEventListener("click", () => {
       this.footerContainer.remove(this.footerContainer);
       this.backgroundContainer.remove(this.backgroundContainer);
       this.body.appendChild(this.watchScreenView);
-      this.watchScreenView.prepend(this.arrowLeft);
+      this.arrowLeft.setAttribute("class", `fa-solid fa-chevron-left`);
+      this.watchScreenView.append(this.arrowLeft);
+    });
+
+    this.arrowLeft.addEventListener("click", (evt) => {
+      console.log("hello guy");
+      window.open("./films.html", "_self");
     });
   };
   changeColorFooter = () => {
@@ -319,6 +285,32 @@ class CreateHome {
         window.open("./actors.html", "_self");
       });
     });
+  };
+  onClickFavorite = () => {
+    this.favContainer = document.createElement("div");
+    const favResContainer = document.createElement("div");
+    this.addFavoriteDiv.addEventListener("click", (evt) => {
+      this.favContainer.setAttribute("class", "favContainer");
+      favResContainer.setAttribute("class", "favResContainer");
+      favResContainer.innerHTML =
+        `<img alt="spiderFavoriteImage" src="./src/img/7964d358a5d25f91a505615b1ed15a63-removebg-preview (1).png"/>` +
+        `<h1>Favorito Adicionado com Sucesso!</h1>`;
+
+      this.favContainer.appendChild(favResContainer);
+      this.body.prepend(this.favContainer);
+      setTimeout(this.removeFavoriteContainer, 1000);
+      this.favoriteListFilms.push(this.jsonId);
+      for (let i of this.favoriteListFilms) {
+      }
+      console.log(
+        "CreateHome ~ this.addFavoriteDiv.addEventListener ~ favoriteListFilms:",
+        this.favoriteListFilms
+      );
+    });
+  };
+
+  removeFavoriteContainer = () => {
+    this.favContainer.remove(this.favContainer);
   };
 }
 export { CreateHome };
