@@ -300,9 +300,13 @@ class CreateHome {
 
   onClickFilm = async () => {
     const myFilms = [...document.querySelectorAll(".filmsContainer img")];
-    myFilms.map((el) => {
+    myFilms.map((el, idx) => {
       el.addEventListener("click", (evt) => {
         const filmStorage = localStorage.setItem("nameFilm@Id", evt.target.id);
+        const urlTrailerFilm = localStorage.setItem(
+          "urlTrailerFilm@ID",
+          this.regexExpression[idx]
+        );
         window.open("./films.html", "_self");
       });
     });

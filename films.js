@@ -1,5 +1,6 @@
 const filmPoster = document.getElementById("filmContent");
 const backArrow = document.getElementById("backArrow");
+const buttonFilm = document.getElementById("buttonFilm");
 
 const renderInfoFilm = async (enpoint, elementId, display) => {
   const playButton = document.querySelector(".rowInfoIcons button");
@@ -25,9 +26,14 @@ const onClickArrow = () => {
     window.open("./index.html", "_self");
   });
 };
+
+buttonFilm.addEventListener("click", (evt) => {
+  window.open("./trailer.html", "_self");
+});
 onClickArrow();
 renderInfoFilm(
   "https://spiderwiki-production.up.railway.app/",
+
   localStorage.getItem("nameFilm@Id"),
   "flex"
 );
