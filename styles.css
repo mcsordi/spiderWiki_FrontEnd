@@ -26,6 +26,8 @@ h5 {
   font-weight: 400;
 }
 body {
+  display: flex;
+  flex-direction: column-reverse;
   width: 100%;
   height: 100vh;
 }
@@ -36,7 +38,7 @@ body {
   align-items: center;
   justify-content: start;
   width: 100%;
-  height: 92%;
+  height: 100%;
   background-color: #161616;
   overflow-y: scroll;
   position: relative;
@@ -58,9 +60,11 @@ body {
 .fa-house,
 .fa-heart,
 .fa-magnifying-glass {
+  font-weight: 400;
   color: #fff;
   font-size: 1rem;
 }
+
 .renderFilmsActors {
   display: flex;
   align-items: center;
@@ -173,7 +177,8 @@ button .fa-play {
   font-size: 16px;
 }
 .addFavoriteDiv,
-.learnMoreDiv {
+.learnMoreDiv,
+.removeFavoriteDiv {
   display: flex;
   align-items: center;
   justify-content: end;
@@ -182,9 +187,12 @@ button .fa-play {
 }
 .addFavoriteDiv p {
   font-size: 0.8rem;
-  margin-top: 2px;
 }
-.fa-circle-info {
+.fa-circle-info,
+.fa-circle-plus,
+.fa-circle-xmark {
+  width: 100%;
+  text-align: center;
   color: #e5e5e5;
   font-size: 1.2rem;
   margin-bottom: 5px;
@@ -344,10 +352,13 @@ button h3 {
   font-size: 14px;
   color: #000;
 }
-.fa-circle-plus {
+/* {
   color: #e5e5e5;
   font-size: 1.2rem;
-}
+  width: 100%;
+  text-align: center;
+} */
+
 .playButtonDiv {
   display: flex;
   align-items: end;
@@ -426,4 +437,11 @@ button h3 {
   text-align: center;
   margin-top: 10px;
   font-size: 28px;
+}
+#heartDiv i,
+#heartDiv p {
+  color: #e60c0d;
+}
+.footerContainer p {
+  font-weight: 400;
 }
