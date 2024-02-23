@@ -270,6 +270,10 @@ class CreateHome {
       });
     });
     this.favoriteContainer.addEventListener("click", (evt) => {
+      const favoriteScreen = localStorage.setItem(
+        "screen@Move",
+        "./favorite.html"
+      );
       window.open("./favorite.html", "_self");
     });
   };
@@ -345,7 +349,7 @@ class CreateHome {
           myRemoveIdEl.push(el);
         }
       });
-      console.log(myRemoveIdEl);
+
       localStorage.setItem(
         "favoriteFilmsStorage@Id",
         JSON.stringify(myRemoveIdEl)

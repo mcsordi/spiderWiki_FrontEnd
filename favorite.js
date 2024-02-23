@@ -1,5 +1,6 @@
 const houseDiv = document.getElementById("houseDiv");
 houseDiv.addEventListener("click", (evt) => {
+  const favoriteScreen = localStorage.setItem("screen@Move", "./index.html");
   document.querySelector("#houseDiv p").style.color = "#e60c0d";
   document.querySelector("#houseDiv i").style.color = "#e60c0d";
   document.querySelector("#heartDiv p").style.color = "#fff";
