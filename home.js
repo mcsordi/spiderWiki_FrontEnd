@@ -108,6 +108,7 @@ class CreateHome {
       ...document.querySelector(".footerContainer").children,
     ];
     this.changeColorFooter();
+    localStorage.setItem("screen@Move", "./index.html");
   };
   getFilms = async () => {
     const getItems = await fetch(this.endpointFilms);
@@ -275,6 +276,9 @@ class CreateHome {
         "./favorite.html"
       );
       window.open("./favorite.html", "_self");
+    });
+    this.searchContainer.addEventListener("click", (evt) => {
+      window.open("./search.html", "_self");
     });
   };
   removeRedColor = () => {

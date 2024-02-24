@@ -110,7 +110,7 @@ const renderInfoFilm = async (elementId, display) => {
 const onClickArrow = (el) => {
   backArrow.addEventListener("click", (evt) => {
     openScreen;
-    window.open(`${localStorage.getItem("screen@Move")}`, "_self");
+    window.open(` ${localStorage.getItem("screen@Move")}` || "index", "_self");
   });
 };
 changeFavoriteIcon();
