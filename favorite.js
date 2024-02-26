@@ -4,7 +4,8 @@ const searchDiv = document.getElementById("searchDiv");
 if (localStorage.getItem("favoriteFilmsStorage@Id") == "[]") {
   localStorage.setItem("favoriteFilmsStorage@Id", null);
 }
-
+document.querySelector("#heartDiv p").style.color = "#e60c0d";
+document.querySelector("#heartDiv i").style.color = "#e60c0d";
 houseDiv.addEventListener("click", (evt) => {
   const favoriteScreen = localStorage.setItem("screen@Move", "./index.html");
   document.querySelector("#houseDiv p").style.color = "#e60c0d";
