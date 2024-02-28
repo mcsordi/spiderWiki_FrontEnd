@@ -537,7 +537,53 @@ button h3 {
   font-weight: 600;
   outline: none;
 }
-.receiveAllElements {
+
+.renderAllFavorites {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
   width: 100%;
   height: 100%;
+}
+.centrilizeElements {
+  display: flex;
+  justify-content: start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  height: auto;
+  margin-left: 2.4rem;
+}
+.centrilizeElements img {
+  width: 102px;
+  height: 150px;
+  border-radius: 6px;
+}
+.centrilizeElements div {
+  display: flex;
+  width: auto;
+  margin: 4px;
+  border-radius: 6px;
+}
+.noContentImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+.noContentImage p {
+  width: 150px;
+  text-align: center;
+  font-weight: 600;
+  margin-top: 8px;
+}
+.noContentImage img {
+  width: 50px;
+}
+.renderAllFavorites h3 {
+  width: 88%;
+  margin: 24px 0px 12px 0px;
 }

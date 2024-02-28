@@ -50,18 +50,20 @@ const onloadSearchFilmScreen = async () => {
   titleFavorite.innerHTML = "Pesquisar";
   rowTitleInfo.appendChild(iconFavorite);
   rowTitleInfo.appendChild(titleFavorite);
-  favoritebackgroundContainer.appendChild(rowTitleInfo);
-  favoritebackgroundContainer.appendChild(searchBarContainer);
+  favoritebackgroundContainer.prepend(searchBarContainer);
+  favoritebackgroundContainer.prepend(rowTitleInfo);
   searchBarContainer.classList.add("magictime", "puffIn");
 };
 
-const myApis = (textValue) => {
+const myApis = () => {
   document.addEventListener("keyup", (evt) => {
     const currentText = document.querySelector(
       ".searchBarContainer  input"
     ).value;
-
-    searchApiElement(currentText.trim());
+    currentText == ""
+      ? searchApiElement(null)
+      : searchApiElement(currentText.trim());
+    document.querySelector(".renderAllFavorites").innerHTML = "";
   });
 };
 const urls = [
@@ -69,40 +71,49 @@ const urls = [
   "https://spiderwikiactorsapi-production.up.railway.app/",
 ];
 const searchApiElement = (inputText) => {
-  const containerFilms = document.createElement("div");
-  containerFilms.setAttribute("class", "containerFilms");
-  const centralizeFilmContainer = document.createElement("div");
-  centralizeFilmContainer.setAttribute("class", "centralizeFilmContainer");
-  const receiveAllElements = document.createElement("div");
+  const renderAllFavorites = document.querySelector(".renderAllFavorites");
+  const centrilizeElements = document.createElement("div");
+  centrilizeElements.setAttribute("class", "centrilizeElements");
 
-  const backgroundSearchScreen = document.querySelector(
-    ".favoritebackgroundContainer"
-  );
+  // const containerFilms = document.createElement("div");
+  // containerFilms.setAttribute("class", "containerFilms");
+  // const centralizeFilmContainer = document.createElement("div");
+  // centralizeFilmContainer.setAttribute("class", "centralizeFilmContainer");
+  // const receiveAllElements = document.createElement("div");
+
   const fetchPromises = urls.map((url) =>
     fetch(`${url}${inputText}`).then((response) => response.json())
   );
-  let divImageEl = null;
-  let divImg = null;
-  Promise.all(fetchPromises)
-    .then((responses) => {
-      const responseData = responses.map((response) => {
-        response.map((el) => {
-          divImageEl = document.createElement("div");
-          divImg = document.createElement("img");
-          divImg.setAttribute("src", el.image_url);
-          divImageEl.append(divImg);
-          centralizeFilmContainer.innerHTML = "";
-          centralizeFilmContainer.append(divImageEl);
-          centralizeFilmContainer.removeChild(divImageEl);
-          containerFilms.appendChild(centralizeFilmContainer);
-        });
 
-        receiveAllElements.appendChild(containerFilms);
-        backgroundSearchScreen.appendChild(receiveAllElements);
+  Promise.all(fetchPromises).then((responses) => {
+    const responseData = responses.map((response) => {
+      centrilizeElements.innerHTML += response.map((el) => {
+        return `<div><img src="${el.image_url}"/></div>`;
       });
-    })
-    .catch((error) => console.error("Error fetching data:", error));
+      renderAllFavorites.innerHTML = "<h3>Resultados</h3>";
+      renderAllFavorites.appendChild(centrilizeElements);
+      // if (response.length == 0 > 1) {
+      //   document.querySelector(".renderAllFavorites").innerHTML =
+      //     "<p>Nenhum item encontrado</p>";
+      // }
+    });
+    someFunction();
+  });
 };
-
+const someFunction = () => {
+  const mainContainerSearch = [
+    ...document.querySelectorAll(".centrilizeElements"),
+  ];
+  mainContainerSearch.map((el, idx) => {
+    console.log(idx);
+    if (idx > 0) {
+      el.remove(el);
+    }
+  });
+  if (document.querySelector(".centrilizeElements").children.length == 0) {
+    document.querySelector(".renderAllFavorites").innerHTML =
+      "<div class='noContentImage'><img src='./src/img/searchImg.png'/><p>Nenhum resultado Encontrado</p>";
+  }
+};
 onloadSearchFilmScreen();
 myApis();
