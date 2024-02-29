@@ -75,12 +75,6 @@ const searchApiElement = (inputText) => {
   const centrilizeElements = document.createElement("div");
   centrilizeElements.setAttribute("class", "centrilizeElements");
 
-  // const containerFilms = document.createElement("div");
-  // containerFilms.setAttribute("class", "containerFilms");
-  // const centralizeFilmContainer = document.createElement("div");
-  // centralizeFilmContainer.setAttribute("class", "centralizeFilmContainer");
-  // const receiveAllElements = document.createElement("div");
-
   const fetchPromises = urls.map((url) =>
     fetch(`${url}${inputText}`).then((response) => response.json())
   );
@@ -88,24 +82,20 @@ const searchApiElement = (inputText) => {
   Promise.all(fetchPromises).then((responses) => {
     const responseData = responses.map((response) => {
       centrilizeElements.innerHTML += response.map((el) => {
-        return `<div><img src="${el.image_url}"/></div>`;
+        return `<div><img class="${el.title}" id="${el._id}" src="${el.image_url}"/></div>`;
       });
       renderAllFavorites.innerHTML = "<h3>Resultados</h3>";
       renderAllFavorites.appendChild(centrilizeElements);
-      // if (response.length == 0 > 1) {
-      //   document.querySelector(".renderAllFavorites").innerHTML =
-      //     "<p>Nenhum item encontrado</p>";
-      // }
     });
-    someFunction();
+    removeDuplicity();
+    onClickRenderScreenElement();
   });
 };
-const someFunction = () => {
+const removeDuplicity = () => {
   const mainContainerSearch = [
     ...document.querySelectorAll(".centrilizeElements"),
   ];
   mainContainerSearch.map((el, idx) => {
-    console.log(idx);
     if (idx > 0) {
       el.remove(el);
     }
@@ -114,6 +104,24 @@ const someFunction = () => {
     document.querySelector(".renderAllFavorites").innerHTML =
       "<div class='noContentImage'><img src='./src/img/searchImg.png'/><p>Nenhum resultado Encontrado</p>";
   }
+};
+const onClickRenderScreenElement = () => {
+  const divFavorites = [
+    ...document.querySelectorAll(".centrilizeElements img"),
+  ];
+  divFavorites.map((el) => {
+    el.addEventListener("click", (evt) => {
+      if (evt.target.classList[0] == "undefined") {
+        console.log(evt.target.id);
+        localStorage.setItem("nameActor@Id", evt.target.id);
+        window.open("./actors.html", "_self");
+      } else {
+        console.log(evt.target.id);
+        localStorage.setItem("nameFilm@Id", evt.target.id);
+        window.open("./films.html", "_self");
+      }
+    });
+  });
 };
 onloadSearchFilmScreen();
 myApis();
