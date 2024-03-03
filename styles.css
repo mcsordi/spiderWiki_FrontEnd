@@ -28,9 +28,10 @@ h5 {
 body {
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: end;
   width: 100%;
   height: 100vh;
+  position: fixed;
   background-color: #000;
 }
 
@@ -40,22 +41,21 @@ body {
   align-items: center;
   justify-content: start;
   width: 100%;
-  height: 92%;
+  height: 100%;
   background-color: #161616;
   overflow-y: scroll;
-  z-index: 1111;
 }
 
 .footerContainer {
   display: flex;
-  position: fixed;
+  position: relative;
   flex-direction: row;
-  align-items: end;
+  align-items: center;
   justify-content: space-around;
   text-align: center;
   width: 100%;
-  height: 100%;
-  padding-bottom: 12px;
+  height: 8%;
+  background-color: #000;
 }
 .footerContainer p {
   font-size: 0.8rem;
