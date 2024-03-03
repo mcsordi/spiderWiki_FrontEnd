@@ -99,9 +99,11 @@ class CreateHome {
     this.footerContainer.appendChild(this.homeContainer);
     this.footerContainer.appendChild(this.searchContainer);
     this.footerContainer.appendChild(this.favoriteContainer);
+
     this.backgroundContainer.appendChild(this.renderFilmImage);
     this.backgroundContainer.appendChild(this.renderFilmsActors);
-    this.body.prepend(this.footerContainer);
+    this.body.appendChild(this.footerContainer);
+
     this.getActors();
     this.getFilms();
     this.childrenfooter = [

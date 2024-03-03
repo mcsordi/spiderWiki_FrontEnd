@@ -27,7 +27,9 @@ h5 {
 }
 body {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
+  justify-content: start;
+  position: absolute;
   width: 100%;
   height: 100vh;
 }
@@ -38,16 +40,14 @@ body {
   align-items: center;
   justify-content: start;
   width: 100%;
-  height: 100%;
+  height: 92%;
   background-color: #161616;
   overflow-y: scroll;
-  position: relative;
-  margin-bottom: 16%;
 }
 
 .footerContainer {
   display: flex;
-  position: fixed;
+  position: relative;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
@@ -55,7 +55,6 @@ body {
   width: 100%;
   height: 8%;
   background-color: #000;
-  z-index: 1111;
 }
 .footerContainer p {
   font-size: 0.8rem;
@@ -451,10 +450,10 @@ button h3 {
 .containerFilms {
   display: flex;
   align-items: start;
-  justify-content: center;
+  justify-content: start;
   flex-direction: column;
   width: 94%;
-  height: auto;
+  height: 100%;
 }
 .containerFilms img {
   width: 102px;
@@ -480,13 +479,13 @@ button h3 {
 .favoritebackgroundContainer {
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: end;
   flex-direction: column;
   width: 100%;
   height: 100%;
   background-color: #161616;
   overflow-y: scroll;
-  margin-bottom: 16%;
+  /* margin-bottom: 16%; */
 }
 .errorContainer {
   display: flex;
