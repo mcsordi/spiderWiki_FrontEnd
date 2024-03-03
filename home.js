@@ -55,7 +55,20 @@ class CreateHome {
   setfavoriteFilmsStorage = [];
   removeFavoriteDiv = null;
 
+  firstTimeHere = () => {
+    const firstTime =
+      JSON.parse(sessionStorage.getItem("splashScreen@Home")) || [];
+    firstTime.push(0);
+
+    sessionStorage.setItem("splashScreen@Home", JSON.stringify(firstTime));
+
+    if (firstTime.length == 1) {
+      window.open("./splashScreen.html", "_self");
+    }
+  };
+
   renderItems = () => {
+    this.firstTimeHere();
     this.backgroundContainer = document.createElement("div");
     this.backgroundContainer.setAttribute("class", "backgroundContainer");
     this.footerContainer = document.createElement("div");
@@ -103,8 +116,6 @@ class CreateHome {
     this.backgroundContainer.appendChild(this.renderFilmImage);
     this.backgroundContainer.appendChild(this.renderFilmsActors);
     this.body.appendChild(this.footerContainer);
-
-    this.getActors();
     this.getFilms();
     this.childrenfooter = [
       ...document.querySelector(".footerContainer").children,
@@ -147,6 +158,7 @@ class CreateHome {
     this.iconsFilmContainer(itemsJson[this.randomNumber].title);
     this.onClickFilm();
     this.onClickFavorite();
+    this.getActors();
   };
   getActors = async () => {
     this.descriptionActorsContainer = document.createElement("div");
