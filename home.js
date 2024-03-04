@@ -38,7 +38,6 @@ class CreateHome {
   filmsAndActors = null;
   arrowLeft = document.createElement("i");
   regex = /^.{11}/;
-  watchScreenView = null;
   regexExpression = [];
   randomNumber = Math.floor(Math.random() * 12);
   width = this.body.offsetWidth;
@@ -245,20 +244,13 @@ class CreateHome {
   };
 
   onPlayButton = async () => {
-    this.watchScreenView = document.createElement("div");
-    this.watchScreenView.setAttribute("class", "watchScreenView");
-    this.watchScreenFilm = document.createElement("iframe");
-    this.watchScreenView.innerHTML = `<div class="fullTrailerContainer"><iframe width="${
-      this.width
-    }" height="${this.heigth - 532}" src="https://www.youtube.com/embed/${
-      this.regexExpression[this.randomNumber]
-    }" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
     this.playButton.addEventListener("click", () => {
-      this.footerContainer.remove(this.footerContainer);
-      this.backgroundContainer.remove(this.backgroundContainer);
-      this.body.appendChild(this.watchScreenView);
-      this.arrowLeft.setAttribute("class", `fa-solid fa-chevron-left`);
-      this.watchScreenView.append(this.arrowLeft);
+      localStorage.setItem(
+        "urlTrailerFilm@ID",
+        this.regexExpression[this.randomNumber]
+      );
+
+      window.open("./trailer.html", "_self");
     });
 
     this.arrowLeft.addEventListener("click", (evt) => {
