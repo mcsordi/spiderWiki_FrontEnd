@@ -95,6 +95,8 @@ const renderInfoFilm = async (elementId, display) => {
   const jsonItems = await items.json();
   await jsonItems.map((el) => {
     if (el._id == elementId) {
+      const currentFilmId = el.trailer_url.split("?v=")[1].match(/^.{11}/)[0];
+      localStorage.setItem("urlTrailerFilm@ID", currentFilmId);
       filmPoster.style = ` background: linear-gradient(#161616 5%  , transparent 50%, #161616  85%),
         no-repeat center/100% 100% url(${el.poster_url});
 `;
