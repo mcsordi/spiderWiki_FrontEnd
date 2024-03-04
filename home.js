@@ -254,7 +254,7 @@ class CreateHome {
       this.regexExpression[this.randomNumber]
     }" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
     this.playButton.addEventListener("click", () => {
-      this.body.removeChild(this.footerContainer);
+      this.footerContainer.remove(this.footerContainer);
       this.backgroundContainer.remove(this.backgroundContainer);
       this.body.appendChild(this.watchScreenView);
       this.arrowLeft.setAttribute("class", `fa-solid fa-chevron-left`);
