@@ -25,8 +25,10 @@ searchDiv.addEventListener("click", (evt) => {
   window.open("./search.html", "_self");
 });
 const getFavoriteFilms = async () => {
-  const myIdFilms = JSON.parse(localStorage.getItem("favoriteFilmsStorage@Id"));
-  const myIdActors = JSON.parse(
+  const myIdFilms = await JSON.parse(
+    localStorage.getItem("favoriteFilmsStorage@Id")
+  );
+  const myIdActors = await JSON.parse(
     localStorage.getItem("favoriteActorsStorage@Id")
   );
 
